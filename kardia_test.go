@@ -1,18 +1,17 @@
 package kardia_test
 
 import (
-	"fmt"
+	"github.com/cpustejovsky/kardia"
 	"github.com/stretchr/testify/assert"
-	"kardia"
 	"testing"
 	"time"
 )
 
 func TestHeart_Beat(t *testing.T) {
 	done := make(chan any)
-	timeout := 11 * time.Second
-	time.AfterFunc(10*time.Second, func() { close(done) })
-	const interval = 1 * time.Second
+	timeout := 20 * time.Millisecond
+	time.AfterFunc(10*time.Millisecond, func() { close(done) })
+	const interval = 1 * time.Millisecond
 	heart := kardia.New(done, interval)
 	go heart.Beat()
 	counter := 0
@@ -23,7 +22,7 @@ func TestHeart_Beat(t *testing.T) {
 				return
 			}
 			counter++
-			fmt.Println("pulse")
+		case <-done:
 		case <-time.After(timeout):
 		}
 	}
